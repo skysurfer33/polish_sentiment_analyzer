@@ -1,0 +1,23 @@
+name: Sync to Hugging Face Spaces
+on:
+  push:
+    branches: [main] # lub master, zależnie jak nazywa się Twoja główna gałąź
+
+  # pozwala też na ręczne uruchomienie z zakładki Actions
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Push to HF
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git remote add hf https://skysurfer33:$HF_TOKEN@huggingface.co/spaces/skysurfer33/polish_sentiment_analyzer
+          git push --force hf HEAD:main
